@@ -1,3 +1,5 @@
+#importar a biblioteca para usar o Case When
+library(dplyr)
 #Importa a base de dados em uma variavel
 #sales <- read.csv("C:/Users/ivosm/Documents/r/Regressao Logistica/SALES_CALL_CENTER_3.csv", header=T)
 #Importa os dados do Github

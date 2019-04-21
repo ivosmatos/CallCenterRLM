@@ -108,3 +108,20 @@ sales <- sales %>%
                            between(prop,1.00,1.999) ~ 10))
 #Resultado do ranking
 table(sales$score)
+
+#Distribuição do score na base
+counts <- table(sales$score)
+barplot(counts, 
+        main="Distribuição de Score", 
+        xlab="Number of Gears")
+
+# Plotar grafico comparando as vendas vs as vendas no moledo
+counts <- table(sales$STATUS_VENDA,y_pred6)
+barplot(counts, 
+        main="Vendas vs Modelo",
+        xlab="Venda ou Não Venda",
+        ylab="Numeros de Registos",
+        col=c("darkblue","red"),
+        legend=c("Vendas", "Modelo"), 
+        names.arg=c("Venda","Não Venda"),
+        beside=TRUE)

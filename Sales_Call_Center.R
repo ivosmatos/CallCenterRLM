@@ -1,7 +1,7 @@
 #Importa a base de dados em uma variavel
 sales <- read.csv("C:/Users/ivosm/Documents/r/Regressao Logistica/SALES_CALL_CENTER_3.csv", header=T)
 #Importa os dados do Github
-#sales <- read.csv(url("https://raw.githubusercontent.com/ivosmatos/CallCenterRL/master/SALES_CALL_CENTER_4.csv?token=AKBUVEX53K62VNA3MHW667C4XTIZY"), header=T)
+#sales <- read.csv(url("https://raw.githubusercontent.com/ivosmatos/CallCenterRLM/master/Dataset/SALES_CALL_CENTER_3.csv"), header=T)
 #Mostra as primeira 5 linhas da tabela criada
 head(sales)
 #----------------------------------------------------------------------------------------------------------#

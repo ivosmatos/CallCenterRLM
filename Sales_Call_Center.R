@@ -22,6 +22,10 @@ sales <- sales %>%
 #Mostra como ficou a nova coluna criada com os numeros
 table(sales$ESTADO_CIVIL_2)
 
+#Aplicando o Dummy na variavel factor
+sales$ESTADO_CIVIL_2.f <- factor(sales$ESTADO_CIVIL_2)
+is.factor(sales$ESTADO_CIVIL_2.f)
+
 #Mostra as variaveis texto que existe
 table(sales$SEXO)
 #Inclui um campo na tabela e transforma o texto em numerico
@@ -31,6 +35,10 @@ sales <- sales %>%
                             SEXO=="I" ~ 3))
 #Mostra como ficou a nova coluna criada com os numeros
 table(sales$SEXO_2)
+
+#Aplicando o Dummy na variavel factor
+sales$SEXO_2.f <- factor(sales$SEXO_2)
+is.factor(sales$SEXO_2.f)
 
 #Mostra as variaveis texto que existe
 table(sales$REGIAO)
@@ -44,6 +52,10 @@ sales <- sales %>%
 #Mostra como ficou a nova coluna criada com os numeros
 table(sales$REGIAO_2)
 
+#Aplicando o Dummy na variavel factor
+sales$REGIAO_2.f <- factor(sales$REGIAO_2)
+is.factor(sales$REGIAO_2.f)
+
 #----------------------------------------------------------------------------------------------------------#
 #Verificar os campos que são numericos
 str(sales)
@@ -54,12 +66,12 @@ y_act <- sales$STATUS_VENDA
 
 #Primeiro modelo com todas as variaveis numericas
 lrm1 <- glm(STATUS_VENDA ~ DIA_VENCIMENTO_FATURA+
-                           MEDIA_FATURA+
-                           IDADE+
-                           ESTADO_CIVIL_2+
-                           SEXO_2+
-                           TEMPO_RELACIONAMENTO_MESES+
-                           REGIAO_2, family="binomial", data = sales)
+              MEDIA_FATURA+
+              IDADE+
+              ESTADO_CIVIL_2+
+              SEXO_2+
+              TEMPO_RELACIONAMENTO_MESES+
+              REGIAO_2, family="binomial", data = sales)
 #resultado o modelo
 summary(lrm1)
 
@@ -74,9 +86,35 @@ table(sales$STATUS_VENDA,y_pred1)
 #Valor de acerto do modelo
 mean(y_pred1 == y_act)
 
+#----------------------------------------------------------------------------------------------------------#
+
+#Segundo modelo com todas as variaveis numericas
+lrm2 <- glm(STATUS_VENDA ~ DIA_VENCIMENTO_FATURA+
+              MEDIA_FATURA+
+              IDADE+
+              ESTADO_CIVIL_2.f+
+              SEXO_2.f+
+              TEMPO_RELACIONAMENTO_MESES+
+              REGIAO_2.f, family="binomial", data = sales)
+#resultado o modelo
+summary(lrm2)
+
+#Aplicando o Predict para verificar o resultado
+pred2 <- predict(lrm2, newdata = sales, type = "response")
+#Transforma o valor em 1 ou 0 gerado no predict
+y_pred_num2 <- ifelse(pred2 > 0.5, 1, 0)
+#Cria uma matriz para verificar se o resultado esta igual ao valores reais
+y_pred2 <- factor(y_pred_num2, levels=c(0, 1))
+#Compara os valores entre o Preditc e a tabela real
+table(sales$STATUS_VENDA,y_pred2)
+#Valor de acerto do modelo
+mean(y_pred2 == y_act)
+
+#----------------------------------------------------------------------------------------------------------#
+
 #Ultimo modelo onde foi alcançado o melhor acerto. Foi utilizada apenas dois preditores
 lrm6 <- glm(STATUS_VENDA ~ MEDIA_FATURA+
-                           TEMPO_RELACIONAMENTO_MESES, family="binomial", data = sales)
+              TEMPO_RELACIONAMENTO_MESES, family="binomial", data = sales)
 #resultado o modelo
 summary(lrm6)
 
@@ -90,6 +128,8 @@ y_pred6 <- factor(y_pred_num6, levels=c(0, 1))
 table(sales$STATUS_VENDA,y_pred6)
 #Valor de acerto do modelo
 mean(y_pred6 == y_act)
+
+#----------------------------------------------------------------------------------------------------------#
 
 #Criando um campo na tabela onde sera mostratado a propabilidade de venda ou não venda
 sales$prop <- predict(lrm6, newdata = sales, type = "response")
